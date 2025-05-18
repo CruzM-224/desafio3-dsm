@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:background="?android:colorBackground"
     android:padding="24dp">
 
     <LinearLayout
@@ -13,42 +14,22 @@
         android:gravity="center">
 
         <TextView
-            android:id="@+id/loginTitle"
-            android:text="Iniciar Sesión"
+            android:id="@+id/mainTitle"
+            android:text="Sesion Iniciada"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:textColor="?android:textColorPrimary"
             android:layout_marginBottom="24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <EditText
-            android:id="@+id/etLoginEmail"
-            android:hint="Correo electrónico"
-            android:inputType="textEmailAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
-
-        <EditText
-            android:id="@+id/etLoginPassword"
-            android:hint="Contraseña"
-            android:inputType="textPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp" />
-
         <Button
-            android:id="@+id/btnLogin"
-            android:text="Iniciar sesión"
-            android:layout_width="match_parent"
+            android:id="@+id/btnlogout"
+            android:text="Cerrar Sesion"
+            android:layout_width="wrap_content"
+            android:maxWidth="300dp"
+            android:minWidth="280dp"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/tvRegisterLink"
-            android:text="¿No tienes cuenta? Regístrate aquí"
-            android:textColor="#0000FF"
-            android:layout_marginTop="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 </ScrollView>
