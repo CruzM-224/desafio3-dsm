@@ -26,13 +26,11 @@ class EditToDoActivity : AppCompatActivity() {
         etDescription = findViewById(R.id.etEditDescription)
         btnUpdate = findViewById(R.id.btnUpdateTodo)
 
-        // 1️⃣ Leer ID que viene en el Intent
         todoId = intent.getStringExtra("TODO_ID") ?: run {
-            finish() // no ID, salimos
+            finish()
             return
         }
 
-        // 2️⃣ Obtener datos actuales para prellenar
         ToDoService.getToDoById(todoId) { success, response ->
             runOnUiThread {
                 if (success && response != null) {
@@ -50,7 +48,6 @@ class EditToDoActivity : AppCompatActivity() {
             }
         }
 
-        // 3️⃣ Listener para actualizar
         btnUpdate.setOnClickListener {
             val title = etTitle.text.toString().trim()
             val desc  = etDescription.text.toString().trim()
@@ -60,7 +57,6 @@ class EditToDoActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Construir JSON con los valores (se envía sin el "id")
             val json = JSONObject().apply {
                 put("title", title)
                 put("description", desc)
@@ -69,12 +65,11 @@ class EditToDoActivity : AppCompatActivity() {
                 put("createdBy", originalCreatedBy)
             }
 
-            // Llamada PUT
             ToDoService.updateToDo(todoId, json.toString()) { success, response ->
                 runOnUiThread {
                     if (success) {
                         Toast.makeText(this, "Tarea actualizada", Toast.LENGTH_SHORT).show()
-                        finish()  // vuelve a la lista y recarga en onResume()
+                        finish()
                     } else {
                         Toast.makeText(this, "Error al actualizar: $response", Toast.LENGTH_LONG).show()
                     }

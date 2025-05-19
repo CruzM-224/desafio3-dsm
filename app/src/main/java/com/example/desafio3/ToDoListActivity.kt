@@ -1,7 +1,6 @@
 package com.example.desafio3
 
 
-import org.json.JSONObject
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -11,34 +10,31 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import org.json.JSONArray
+import org.json.JSONObject
 
 class ToDoListActivity : AppCompatActivity(), ToDoAdapter.OnItemActionListener {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: ToDoAdapter
-    private val toDoList = mutableListOf<ToDo>()
-    private val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email ?: ""
+    private lateinit var adapter     : ToDoAdapter
+    private val toDoList            = mutableListOf<ToDo>()
+    private val currentUserEmail    = FirebaseAuth.getInstance().currentUser?.email ?: ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do_list)
 
-        // 1️⃣ Logout
         findViewById<Button>(R.id.btnLogout).setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
-
-        // 2️⃣ Agregar nueva tarea
         findViewById<Button>(R.id.btnAddTodo).setOnClickListener {
             startActivity(Intent(this, AddToDoActivity::class.java))
         }
 
-        // 3️⃣ Configurar RecyclerView
         recyclerView = findViewById(R.id.recyclerToDo)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = ToDoAdapter(toDoList, this)  // 'this' implementa OnItemActionListener
+        adapter = ToDoAdapter(toDoList, this)
         recyclerView.adapter = adapter
 
         loadToDos()
@@ -54,18 +50,18 @@ class ToDoListActivity : AppCompatActivity(), ToDoAdapter.OnItemActionListener {
             runOnUiThread {
                 if (success && response != null) {
                     toDoList.clear()
-                    val jsonArray = JSONArray(response)
-                    for (i in 0 until jsonArray.length()) {
-                        val obj = jsonArray.getJSONObject(i)
+                    val arr = JSONArray(response)
+                    for (i in 0 until arr.length()) {
+                        val obj = arr.getJSONObject(i)
                         if (obj.getString("createdBy") == currentUserEmail) {
                             toDoList.add(
                                 ToDo(
-                                    id = obj.getString("id"),
-                                    title = obj.getString("title"),
+                                    id          = obj.getString("id"),
+                                    title       = obj.getString("title"),
                                     description = obj.getString("description"),
-                                    done = obj.getBoolean("done"),
-                                    createdAt = obj.getString("createdAt"),
-                                    createdBy = obj.getString("createdBy")
+                                    done        = obj.getBoolean("done"),
+                                    createdAt   = obj.getString("createdAt"),
+                                    createdBy   = obj.getString("createdBy")
                                 )
                             )
                         }
@@ -78,11 +74,13 @@ class ToDoListActivity : AppCompatActivity(), ToDoAdapter.OnItemActionListener {
         }
     }
 
+
     override fun onEdit(todo: ToDo) {
         val intent = Intent(this, EditToDoActivity::class.java)
         intent.putExtra("TODO_ID", todo.id)
         startActivity(intent)
     }
+
 
     override fun onDelete(todo: ToDo) {
         ToDoService.deleteToDo(todo.id) { success, _ ->
@@ -91,7 +89,32 @@ class ToDoListActivity : AppCompatActivity(), ToDoAdapter.OnItemActionListener {
                     Toast.makeText(this, "Tarea eliminada", Toast.LENGTH_SHORT).show()
                     loadToDos()
                 } else {
-                    Toast.makeText(this, "Error al eliminar tarea", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Error al eliminar", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    override fun onToggleDone(todo: ToDo, isDone: Boolean) {
+
+        val json = JSONObject().apply {
+            put("title", todo.title)
+            put("description", todo.description)
+            put("done", isDone)
+            put("createdAt", todo.createdAt)
+            put("createdBy", todo.createdBy)
+        }
+        ToDoService.updateToDo(todo.id, json.toString()) { success, _ ->
+            runOnUiThread {
+                if (success) {
+                    Toast.makeText(
+                        this,
+                        if (isDone) "Marcada como completada" else "Marcada como pendiente",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    loadToDos()
+                } else {
+                    Toast.makeText(this, "Error al actualizar", Toast.LENGTH_LONG).show()
                 }
             }
         }

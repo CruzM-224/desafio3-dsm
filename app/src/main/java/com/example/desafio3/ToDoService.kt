@@ -9,7 +9,6 @@ object ToDoService {
     private val client = OkHttpClient()
     private const val BASE_URL = "https://68163b7232debfe95dbdd500.mockapi.io/academic/v1/to-do"
 
-    // GET all tasks
     fun getAllToDos(onResult: (Boolean, String?) -> Unit) {
         val request = Request.Builder()
             .url(BASE_URL)
@@ -27,7 +26,6 @@ object ToDoService {
         })
     }
 
-    // GET one task by ID
     fun getToDoById(id: String, onResult: (Boolean, String?) -> Unit) {
         val request = Request.Builder()
             .url("$BASE_URL/$id")
@@ -45,7 +43,6 @@ object ToDoService {
         })
     }
 
-    // POST: create a new task
     fun createToDo(jsonBody: String, onResult: (Boolean, String?) -> Unit) {
         val requestBody = jsonBody.toRequestBody("application/json".toMediaType())
         val request = Request.Builder()

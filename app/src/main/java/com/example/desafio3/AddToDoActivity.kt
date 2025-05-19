@@ -30,7 +30,6 @@ class AddToDoActivity : AppCompatActivity() {
             val title = etTitle.text.toString().trim()
             val desc  = etDescription.text.toString().trim()
 
-            // Validación simple
             if (title.isEmpty() || desc.isEmpty()) {
                 Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -41,7 +40,6 @@ class AddToDoActivity : AppCompatActivity() {
                 put("title", title)
                 put("description", desc)
                 put("done", false)
-                // Fecha en ISO
                 val iso = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
                     .format(Date())
                 put("createdAt", iso)
@@ -53,7 +51,6 @@ class AddToDoActivity : AppCompatActivity() {
                 runOnUiThread {
                     if (success) {
                         Toast.makeText(this, "Tarea creada", Toast.LENGTH_SHORT).show()
-                        // Volver a la lista
                         finish()
                     } else {
                         Toast.makeText(this, "Error: $response", Toast.LENGTH_LONG).show()
