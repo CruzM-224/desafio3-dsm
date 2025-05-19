@@ -36,7 +36,3 @@ Además, cada ítem de la lista cuenta con:
 - **API REST:**  
   `https://68163b7232debfe95dbdd500.mockapi.io/academic/v1/to-do`
 
----
-
-## 📦 Estructura del proyecto
-
