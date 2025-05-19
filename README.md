@@ -1,6 +1,5 @@
-﻿# desafio3-dsm
-
-# Desafío 3 – To-Do List App
+﻿
+# Desafío 3 DSM – To-Do List App
 
 **Autores:**  
 - Alvarenga Claros Carlos Alexander AC211104 
